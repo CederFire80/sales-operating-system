@@ -1,0 +1,152 @@
+---
+title: "Designing incentives that drive the behavior you want"
+description: "Build the comp plan around the behavior you want. Pay on leading indicators, hold one multiplier, and let a strong accelerator do the motivating."
+---
+
+export function CompCalculator() {
+  const [oteA, setOteA] = useState(200000);
+  const [oteB, setOteB] = useState(240000);
+  const [accel, setAccel] = useState(2);
+  const [att, setAtt] = useState(130);
+
+  const payout = (ote, aPct, accelM) => {
+    const a = aPct / 100;
+    const base = ote / 2;
+    const quota = 5 * ote;
+    const vTarget = ote / 2;
+    const rate = vTarget / quota;
+    let variable;
+    if (a <= 1) variable = rate * (a * quota);
+    else variable = vTarget + rate * accelM * ((a - 1) * quota);
+    return base + variable;
+  };
+
+  const aTotal = payout(oteA, att, accel);
+  const bTotal = oteB;
+  const crossPct = oteA > 0 && accel > 0 ? (1 + (oteB / oteA - 1) / (0.5 * accel)) * 100 : 100;
+  const maxVal = Math.max(aTotal, bTotal) * 1.12;
+  const fmt = (n) => "$" + Math.round(n).toLocaleString();
+  const ahead = aTotal - bTotal;
+
+  const accent = "#B9772B";
+  const muted = "#8a8a8a";
+  const border = "1px solid rgba(128,128,128,0.3)";
+  const wrap = { border, borderRadius: "12px", padding: "20px 22px", margin: "12px 0", fontSize: "14px" };
+  const row = { display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", margin: "10px 0" };
+  const label = { fontWeight: 600, minWidth: "180px" };
+  const val = { fontVariantNumeric: "tabular-nums", color: accent, fontWeight: 600 };
+  const barTrack = { background: "rgba(128,128,128,0.15)", borderRadius: "6px", height: "26px", width: "100%", overflow: "hidden" };
+  const barRow = { display: "grid", gridTemplateColumns: "110px 1fr 110px", alignItems: "center", gap: "10px", margin: "8px 0" };
+
+  const slider = (value, min, max, step, onChange) => (
+    <input type="range" min={min} max={max} step={step} value={value}
+      onChange={(e) => onChange(Number(e.target.value))}
+      style={{ flex: 1, accentColor: accent }} />
+  );
+
+  return (
+    <div style={wrap}>
+      <div style={row}>
+        <span style={label}>Rep A OTE</span>
+        {slider(oteA, 150000, 300000, 10000, setOteA)}
+        <span style={val}>{fmt(oteA)}</span>
+      </div>
+      <div style={row}>
+        <span style={label}>Rep B OTE (sits at 100%)</span>
+        {slider(oteB, 150000, 350000, 10000, setOteB)}
+        <span style={val}>{fmt(oteB)}</span>
+      </div>
+      <div style={row}>
+        <span style={label}>Accelerator (past plan)</span>
+        {slider(accel, 1.5, 3, 0.25, setAccel)}
+        <span style={val}>{accel}x</span>
+      </div>
+      <div style={row}>
+        <span style={label}>Rep A attainment</span>
+        {slider(att, 100, 160, 5, setAtt)}
+        <span style={val}>{att}%</span>
+      </div>
+
+      <div style={{ borderTop: border, margin: "16px 0 12px", paddingTop: "14px" }}>
+        <div style={barRow}>
+          <span style={{ fontWeight: 600 }}>Rep A</span>
+          <div style={barTrack}>
+            <div style={{ width: (aTotal / maxVal * 100) + "%", height: "100%", background: accent, borderRadius: "6px" }} />
+          </div>
+          <span style={{ ...val, textAlign: "right" }}>{fmt(aTotal)}</span>
+        </div>
+        <div style={barRow}>
+          <span style={{ fontWeight: 600, color: muted }}>Rep B</span>
+          <div style={barTrack}>
+            <div style={{ width: (bTotal / maxVal * 100) + "%", height: "100%", background: muted, borderRadius: "6px" }} />
+          </div>
+          <span style={{ ...val, color: muted, textAlign: "right" }}>{fmt(bTotal)}</span>
+        </div>
+      </div>
+
+      <p style={{ margin: "10px 0 0" }}>
+        {ahead >= 0
+          ? "At " + att + "% of quota, Rep A out-earns Rep B by " + fmt(ahead) + ", on a lower OTE."
+          : "At " + att + "% of quota, Rep A trails Rep B by " + fmt(-ahead) + "."}
+      </p>
+      <p style={{ margin: "6px 0 0", color: muted }}>
+        Rep A passes Rep B at {Math.round(crossPct)}% of quota. Past that point, the next deal beats any base increase.
+      </p>
+    </div>
+  );
+}
+
+Comp is the most powerful instrument a sales leader has. Build the plan around the behavior you want, and the dashboards, the weekly rhythm, and the team's daily choices start organizing themselves around it. Here is how I design one.
+
+## Why it matters
+
+A rep reads the comp plan more closely than any memo a leader will ever write. Whatever the plan pays for is what the team produces, in detail, every quarter. So the comp plan is where a lot of the leadership actually happens, and it deserves to be designed as the lever it is.
+
+<Note>
+  Pay for the behavior you want, and you will get it. The plan is read more closely than any memo.
+</Note>
+
+## How I build it
+
+<Steps>
+  <Step title="Pay on clear customer actions">
+    Define each stage by something the customer did: signed an NDA, opened a sandbox, started a live evaluation. When advancement means a real customer action, the pipeline becomes honest by construction and reps compete on moving customers forward, which is exactly the thing you want them spending their day on.
+  </Step>
+  <Step title="Put a defined share of variable on the leading indicators">
+    Carve out a meaningful slice of variable for the two inputs that predict revenue: the net-new meetings a rep creates and the live evaluations they start. Cap each so the plan rewards balance, and set the targets off your known conversion rates so the math ladders cleanly to quota. A new rep earns on the right behavior from the first month, which funds the ramp and proves the motion before the first deal lands.
+  </Step>
+  <Step title="Hold one quota-to-OTE multiplier for everyone">
+    I run a 5x: quota is five times OTE, the same ratio for every rep whatever their base. It keeps the plan legible and fair, and it makes the path to more money more production, set by the same rule for everyone.
+  </Step>
+  <Step title="Let the accelerator carry the motivation">
+    Put a strong accelerator on every dollar past 100 percent. Because quota climbs with OTE, a bigger base keeps moving the finish line, so the real reward for your best people is the accelerator on the next deal. Pay that well and the hunters keep hunting, and they stay.
+  </Step>
+</Steps>
+
+## The accelerator beats a bigger base
+
+A rep on a lower OTE who pushes past plan out-earns a rep who negotiated a higher OTE and stopped at 100 percent. Move the sliders to see where the two reps cross, and how the accelerator rate changes it. The plan here pays 10 percent of bookings up to quota and the accelerator multiple past it.
+
+<CompCalculator />
+
+## What the plan pays for
+
+<CardGroup cols={2}>
+  <Card title="The inputs that create revenue" icon="bolt">
+    Net-new meetings created and live evaluations started, paid as a defined, capped share of variable, so the right behavior earns from day one and ramp funds itself.
+  </Card>
+  <Card title="The revenue those inputs produce" icon="sack-dollar">
+    Closed revenue on the action-defined stages, the lagging number that follows reliably once the leading indicators are humming.
+  </Card>
+</CardGroup>
+
+<Note>
+  Hold one multiplier for everyone, and let the accelerator do the motivating.
+</Note>
+
+## What good looks like
+
+- New reps are earning on leading-indicator pay by their first full quarter, so the ramp funds itself.
+- Stage data is trustworthy, because every advance is tied to a customer action.
+- Your best hunters stay, because the accelerator makes the next deal their fastest path to more pay.
+- The weekly rhythm and the dashboards all point at the same behavior, because the comp plan set the direction.

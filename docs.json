@@ -1,0 +1,39 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Sales Leadership Operating System",
+  "description": "A working operating system for building and running a high-performing sales team.",
+  "colors": {
+    "primary": "#9A5F1E",
+    "light": "#D99A4E",
+    "dark": "#9A5F1E"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Start here",
+        "pages": ["index"]
+      },
+      {
+        "group": "The shift",
+        "pages": ["farmers-to-hunters"]
+      },
+      {
+        "group": "The engine: create the pipeline",
+        "pages": ["pipeline-generation", "incentive-design", "hiring"]
+      },
+      {
+        "group": "The system: run it every week",
+        "pages": ["operating-rhythm", "deal-management", "coaching"]
+      },
+      {
+        "group": "The edge: measure it and scale it",
+        "pages": ["managing-inputs", "ai-native-sales"]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {}
+  }
+}
