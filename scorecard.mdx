@@ -46,6 +46,8 @@ An event that cannot be verified is excluded from its line, never scored as zero
 
 Stages are the team's own CRM stage values. Any customer action named on this page, a signed NDA or an opened sandbox, is an example of what a stage can mean, not a field the agent must hunt for. Read the stage from the CRM and credit the line when the opportunity reaches it.
 
+Where a line can be read at more than one fidelity, name which one produced the score. Book a meeting from a meeting is the clearest case: a transcript showing the next step agreed in the room is the strong read, and a follow-up invite created the same day, tied to the same account and an external contact with duplicates collapsed, is the interim proxy, labeled a same-day follow-up and not a booking confirmed on the call. Score the fidelity the data supports, and say which it was.
+
 ### The weekly board
 
 | ID | Score | Weight | Data source | Measure, last 7 days | Rule |
@@ -57,7 +59,7 @@ Stages are the team's own CRM stage values. Any customer action named on this pa
 | W5 | Stakeholders added | 15 | Email and meeting activity on active deals | New engaged stakeholders on the deal, counted the way the team's data supports | min(1, actual/target) |
 
 <Note>
-  The self-sourced tag reads from the lead-source field, so the 5x rewards real hunting. A stakeholder counts when there is real engagement, defined against the team's own data, so the line rewards multi-threading and not a bulk contact import.
+  The self-sourced tag reads from the lead-source field, so the 5x rewards real hunting. The 5x applies only when source is known for a material share of the field: when most activity is unclassified, run W1 and W2 as raw counts and mark the source weighting pending, so the board ranks on who hunted and not on who tagged. A stakeholder counts when there is real engagement, defined against the team's own data, so the line rewards multi-threading and not a bulk contact import.
 </Note>
 
 ### The monthly board
@@ -127,6 +129,8 @@ For each rep the agent fills this shape and ranks the team. The spread between t
 | Rep C | 12 | 10 | 8 | 10 | 6 | 46 | 3 | 44 |
 
 Example rows, showing the output shape. The agent replaces them with live data.
+
+Alongside the scores, the agent reports the coverage behind each line, the share of events it could verify or classify, such as source known on W1 and W2 or transcript and calendar coverage on W4. A line scored on thin coverage is labeled provisional, so the board shows how firm each number is and no one reads a soft line as settled.
 
 ## What each team supplies
 
