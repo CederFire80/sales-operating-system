@@ -29,24 +29,27 @@ Revenue is a lagging number, so I run the team on the inputs that produce it, an
 Two rules cover every line. A count line scales to its target, and the two source-weighted lines value self-sourced work at five times inbound. I set a default weight on each line and tune it to the motion. The targets belong to the team, calibrated per segment and per ramp stage, so a new rep is measured against a ramp target and a tenured rep against a full one.
 
 ```
-line_pct   = min(1, actual / target)        # count lines
+line_pct   = min(1, actual / target)        # count lines, when a target is set
+line_pct   = actual / top_performer_actual  # provisional, when no target yet
 effective  = 5 * self_sourced + 1 * inbound # source-weighted lines
 line_pts   = line_pct * line_weight
 composite  = sum(line_pts)                   # 0 to 100
 ```
+
+The weekly board does not wait on calibration. When a line has an agreed target it scores against it. When it does not, the agent scores that line relative to the team that same week, indexing each rep to the current top performer, and a trailing team median works too, so the line still runs from zero to its weight. That keeps the stack-rank and the top-to-median spread live from the first Monday, which is the whole point of the weekly board. Mark those lines provisional, and swap in absolute targets as they are set. The monthly board always scores against absolute targets and benchmarks, because there the absolute number is the point.
 
 ### The weekly board
 
 | ID | Score | Weight | Data source | Measure, last 7 days | Rule |
 |----|-------|--------|-------------|----------------------|------|
 | W1 | New business meetings | 30 | Calendar and lead-source field, new-business accounts | Meetings held, split self-sourced vs inbound | min(1, effective/target), self-sourced 5x |
-| W2 | New opportunities opened | 25 | Opportunity entering the first qualified stage, a customer action such as a signed NDA | Deals that reached that stage, split by source | min(1, effective/target), self-sourced 5x |
+| W2 | New opportunities opened | 25 | Opportunity entering your first qualified stage, as the team's own stage field defines it | Deals that reached that stage, split by source | min(1, effective/target), self-sourced 5x |
 | W3 | Customer activation | 20 | Product event, the customer's first hands-on use, a trial or sandbox login | Active deals with a customer login this week | min(1, actual/target) |
-| W4 | Book a meeting from a meeting | 10 | Call transcript, or calendar timing (next invite sent during or the same day as the meeting) | Share of meetings held that ended with the next meeting booked | min(1, rate/target) |
-| W5 | Stakeholders added | 15 | Email and meeting activity on active deals | New stakeholders with a two-way exchange | min(1, actual/target) |
+| W4 | Book a meeting from a meeting | 10 | A booked next step tied to a held meeting, detected however the agent's access allows (call transcript, or a next invite that follows soon after) | Share of meetings held that led to a next meeting booked | min(1, rate/target) |
+| W5 | Stakeholders added | 15 | Email and meeting activity on active deals | New engaged stakeholders on the deal, counted the way the team's data supports | min(1, actual/target) |
 
 <Note>
-  The self-sourced tag reads from the lead-source field, so the 5x rewards real hunting. A stakeholder counts once they reply or attend, so engagement earns the point.
+  The self-sourced tag reads from the lead-source field, so the 5x rewards real hunting. A stakeholder counts when there is real engagement, defined against the team's own data, so the line rewards multi-threading and not a bulk contact import.
 </Note>
 
 ### The monthly board
@@ -122,7 +125,7 @@ Example rows, showing the output shape. The agent replaces them with live data.
 The method is complete on this page. Two inputs make it run on your data, and three more unlock the parked lines.
 
 <Steps>
-  <Step title="Targets">A value per line, per segment and ramp stage. The agent measures actual against these.</Step>
+  <Step title="Targets">A value per line, per segment and ramp stage. The monthly board needs them. The weekly board uses them when set and scores relative to the team when they are not, so it runs without waiting.</Step>
   <Step title="A lead-source field">The source or first-touch tag that marks self-sourced from inbound, so the 5x is data and never a rep's own label.</Step>
   <Step title="A product activation event">A customer-login signal piped to the data layer, for the activation line.</Step>
   <Step title="The CRM field names">The object, stage, and field names for the qualified stage, active-deal status, and contact roles, so the queries resolve.</Step>
