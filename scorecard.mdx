@@ -1,0 +1,139 @@
+---
+title: "Scoring the inputs, weekly and monthly"
+description: "Two boards that read the same funnel at two depths: a weekly board for the inputs a rep controls, and a monthly board for what they produce, written out so an agent can fill it from the CRM."
+---
+
+[Managing the inputs](/managing-inputs) tells a team what to watch. The scorecard is how I make the team run on it every week. It is two boards that read the same funnel at two depths: a weekly board for the inputs a rep controls, and a monthly board for what those inputs produce. I write the scoring out in full, so an agent can read this page, pull the CRM, and fill it in with nothing added but the team's own targets and field names.
+
+<Note>
+  Every line is a counted event. A meeting happened, a customer signed, a buyer logged in. That keeps the board a fact, and keeps every coaching conversation pointed at one.
+</Note>
+
+## Why it matters
+
+Revenue is a lagging number, so I run the team on the inputs that produce it, and the scorecard is where those inputs become something I rank and coach on a Monday. The weekly board holds only what a rep controls right now, all of it counted events, so the ranking is fair and the one-to-one starts from a fact instead of an opinion. The monthly board holds the outcome those inputs produce, read on a slower clock where the data has settled. Run together, they show a rep their week and show me the whole engine.
+
+## The two boards
+
+<CardGroup cols={2}>
+  <Card title="Weekly board: the inputs" icon="bolt">
+    Five counted events from the last seven days: pipeline created, customers activated, deals multi-threaded, next steps booked. I review and rank it the same day each week.
+  </Card>
+  <Card title="Monthly board: the outcomes" icon="trophy">
+    Five results one altitude up: quota, win rate, conversion health, late-stage velocity, and the quality of what closed. This is where the number lives.
+  </Card>
+</CardGroup>
+
+## How I score it
+
+Two rules cover every line. A count line scales to its target, and the two source-weighted lines value self-sourced work at five times inbound. I set a default weight on each line and tune it to the motion. The targets belong to the team, calibrated per segment and per ramp stage, so a new rep is measured against a ramp target and a tenured rep against a full one.
+
+```
+line_pct   = min(1, actual / target)        # count lines
+effective  = 5 * self_sourced + 1 * inbound # source-weighted lines
+line_pts   = line_pct * line_weight
+composite  = sum(line_pts)                   # 0 to 100
+```
+
+### The weekly board
+
+| ID | Score | Weight | Data source | Measure, last 7 days | Rule |
+|----|-------|--------|-------------|----------------------|------|
+| W1 | New business meetings | 30 | Calendar and lead-source field, new-business accounts | Meetings held, split self-sourced vs inbound | min(1, effective/target), self-sourced 5x |
+| W2 | New opportunities opened | 25 | Opportunity entering the first qualified stage, a customer action such as a signed NDA | Deals that reached that stage, split by source | min(1, effective/target), self-sourced 5x |
+| W3 | Customer activation | 20 | Product event, the customer's first hands-on use, a trial or sandbox login | Active deals with a customer login this week | min(1, actual/target) |
+| W4 | Book a meeting from a meeting | 10 | Call transcript, or calendar timing (next invite sent during or the same day as the meeting) | Share of meetings held that ended with the next meeting booked | min(1, rate/target) |
+| W5 | Stakeholders added | 15 | Email and meeting activity on active deals | New stakeholders with a two-way exchange | min(1, actual/target) |
+
+<Note>
+  The self-sourced tag reads from the lead-source field, so the 5x rewards real hunting. A stakeholder counts once they reply or attend, so engagement earns the point.
+</Note>
+
+### The monthly board
+
+| ID | Score | Weight | Data source | Rule |
+|----|-------|--------|-------------|------|
+| P1 | Quota attainment, ramp-adjusted | 35 | Bookings vs a ramp-adjusted target | graduated curve, and the top-tier gate |
+| P2 | Win rate, evaluation to close | 25 | Closed-won over won plus lost, trailing ninety days | min(1, actual/benchmark) |
+| P3 | Conversion health | 15 | Stage-to-stage rates across the funnel | composite vs benchmark |
+| P4 | Late-stage velocity | 15 | Deals reaching the buying committee, paper started, days to close | blended vs target |
+| P5 | Commercial quality | 10 | Contract terms, multi-year, durable commitments, retention | blended vs target |
+
+<Note>
+  Quota stays off the weekly board and anchors the monthly one. A rep reaches the top tier only once quota clears a ramp-adjusted floor, so the day-to-day stack-rank rewards the inputs a rep controls.
+</Note>
+
+## How I run it every week
+
+<Steps>
+  <Step title="Pull the seven-day inputs">
+    The five weekly scores come straight from the system of record over the last seven days. No one types a number, so the board is the same fact for everyone.
+  </Step>
+  <Step title="Rank, and read the spread">
+    I stack-rank the team and watch the distance between the top rep and the median. Closing that gap is the point, because it means the playbook is transferring and the floor is coming up.
+  </Step>
+  <Step title="Coach to one change">
+    In the one-to-one I name one thing the rep did well, one thing to do differently, and a single commitment, anchored to the line that moves their number.
+  </Step>
+  <Step title="Read the outcomes monthly">
+    Once a month I read the outcome board against the input-to-outcome map, to see which input is feeding, or starving, which result.
+  </Step>
+</Steps>
+
+## Consistent and complementing
+
+The two boards are the same funnel at two depths, so every weekly input has a monthly outcome it feeds. Watching the pair is the diagnosis.
+
+| Weekly input | The monthly outcome it moves |
+|--------------|------------------------------|
+| Meetings and opportunities created | Conversion health, then quota |
+| Customer activation | Win rate, because an activated evaluation closes more often |
+| Stakeholders added | Win rate and deals reaching the buying committee |
+| Book a meeting from a meeting | Velocity, because a booked next step keeps the deal moving |
+
+<Note>
+  When the weekly inputs run green and the monthly outcomes lag, the work is conversion. When both run green, the engine is healthy and scaling. The weekly board already names the rep and the line.
+</Note>
+
+## Measure to tenure
+
+I measure a rep on the stage they are in, so the board is fair from week one and a new hire can earn a real win early, on a behavior they control right now.
+
+<CardGroup cols={3}>
+  <Card title="Ramping" icon="seedling">Score on meetings created. An early win on a behavior the rep owns.</Card>
+  <Card title="Maturing" icon="arrow-trend-up">Score on mid-stage pipeline and multi-threading.</Card>
+  <Card title="Tenured" icon="award">Score on closed revenue, with the full monthly board live.</Card>
+</CardGroup>
+
+## What the agent writes
+
+For each rep the agent fills this shape and ranks the team. The spread between the top rep and the median is the headline I read first.
+
+| Rep | W1 | W2 | W3 | W4 | W5 | Weekly /100 | Rank | Monthly /100 |
+|-----|----|----|----|----|----|-------------|------|--------------|
+| Rep A | 27 | 25 | 20 | 10 | 12 | 94 | 1 | 71 |
+| Rep B | 18 | 14 | 20 | 0 | 9 | 61 | 2 | 58 |
+| Rep C | 12 | 10 | 8 | 10 | 6 | 46 | 3 | 44 |
+
+Example rows, showing the output shape. The agent replaces them with live data.
+
+## What each team supplies
+
+The method is complete on this page. Two inputs make it run on your data, and three more unlock the parked lines.
+
+<Steps>
+  <Step title="Targets">A value per line, per segment and ramp stage. The agent measures actual against these.</Step>
+  <Step title="A lead-source field">The source or first-touch tag that marks self-sourced from inbound, so the 5x is data and never a rep's own label.</Step>
+  <Step title="A product activation event">A customer-login signal piped to the data layer, for the activation line.</Step>
+  <Step title="The CRM field names">The object, stage, and field names for the qualified stage, active-deal status, and contact roles, so the queries resolve.</Step>
+  <Step title="Stage timestamps">Entry and exit times per stage, which unlock stall control on the weekly board and velocity on the monthly.</Step>
+</Steps>
+
+## What good looks like
+
+- The weekly board is a fact, not a debate, because every line is a counted event.
+- Every rep knows the one or two lines that move their number, and manages to them.
+- The top-to-median spread is narrowing quarter over quarter.
+- When the monthly outcomes lag a green weekly board, I know the work is conversion, and the board already names the rep and the line.
+
+Pair this with the [operating rhythm](/operating-rhythm) for the weekly cadence, [incentive design](/incentive-design) to pay on the same inputs, and [deal management](/deal-management) for the customer-action stages the scores sit on.
