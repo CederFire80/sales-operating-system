@@ -1,86 +1,129 @@
 ---
-title: "Scoring the inputs, weekly and monthly"
-description: "Two boards that read the same funnel at two depths: a weekly board for the inputs a rep controls, and a monthly board for what they produce, written out so an agent can fill it from the CRM."
+title: "Scoring the funnel at three depths"
+description: "The funnel read at three depths: a weekly board for what a rep is doing, a monthly board for whether it is progressing, and a trailing view for what it produced, scored by points or by ranking, written so an agent can fill it from the CRM."
 ---
 
-[Managing the inputs](/managing-inputs) tells a team what to watch. The scorecard is how I make the team run on it every week. It is two boards that read the same funnel at two depths: a weekly board for the inputs a rep controls, and a monthly board for what those inputs produce. I write the scoring out in full, so an agent can read this page, pull the CRM, and fill it in with nothing added but the team's own targets and field names. Where those are not wired up yet, the agent works with the user to find them or approximate them, so the score starts now and sharpens over time.
+[Managing the inputs](/managing-inputs) tells a team what to watch. The scorecard is how I make the team run on it every week. It reads the same funnel at three depths: the weekly board is whether a rep is doing the work, the monthly board is whether that work is progressing, with deals converting and moving through the funnel, and a trailing result view confirms whether it produced, quota and win rate on a rolling window. I write the scoring out in full, so an agent can read this page, pull the CRM, and fill it in with nothing added but the team's own targets and field names. Where those are not wired up yet, the agent works with the user to find them or approximate them, so the score starts now and sharpens over time.
 
 <Note>
-  Every line is a counted event. A meeting happened, a customer signed, a buyer logged in. That keeps the board a fact, and keeps every coaching conversation pointed at one.
+  Every line is a counted event. A meeting happened, a customer signed, a buyer logged in, a deal advanced a stage. That keeps the board a fact, and keeps every coaching conversation pointed at one.
 </Note>
 
 ## Why it matters
 
-Revenue is a lagging number, so I run the team on the inputs that produce it, and the scorecard is where those inputs become something I rank and coach on a Monday. The weekly board holds only what a rep controls right now, all of it counted events, so the ranking is fair and the one-to-one starts from a fact instead of an opinion. The monthly board holds the outcome those inputs produce, read on a slower clock where the data has settled. Run together, they show a rep their week and show me the whole engine.
+Revenue is a lagging number, so I run the team on the inputs that produce it, and the scorecard is where those inputs become something I rank and coach on a Monday. The weekly board holds what a rep controls right now, all of it counted events, so the ranking is fair and the one-to-one starts from a fact instead of an opinion. The monthly board reads whether that work is progressing, deals converting and moving, which is the earliest honest signal of performance when a deal can take two or three quarters to close. The trailing view holds the result, read on a slower clock where the closes have settled. Together they show a rep their week, their trajectory, and their number.
 
-## The two boards
+## The three layers
 
-<CardGroup cols={2}>
-  <Card title="Weekly board: the inputs" icon="bolt">
-    Five counted events from the last seven days: pipeline created, customers activated, deals multi-threaded, next steps booked. I review and rank it the same day each week.
+<CardGroup cols={3}>
+  <Card title="Weekly: doing" icon="bolt">
+    Counted events from the last seven days: meetings held, opportunities opened, in-person meetings, next steps booked, stakeholders added. Tactical, reviewed and ranked the same day each week.
   </Card>
-  <Card title="Monthly board: the outcomes" icon="trophy">
-    Five results one altitude up: quota, win rate, conversion health, late-stage velocity, and the quality of what closed. This is where the number lives.
+  <Card title="Monthly: progress" icon="arrow-trend-up">
+    Whether the work is converting and moving: step-by-step funnel conversion and velocity. Close-independent, so it reads a long cycle mid-flight. The performance and talent stack-rank.
+  </Card>
+  <Card title="Trailing: result" icon="trophy">
+    Quota and win rate on a rolling window sized to the cycle. The lagging confirmation, and the check against progress that never converts.
   </Card>
 </CardGroup>
 
 ## How I score it
 
-Two rules cover every line. A count line scales to its target, and the two source-weighted lines value self-sourced work at five times inbound. I set a default weight on each line and tune it to the motion. The targets belong to the team, calibrated per segment and per ramp stage, so a new rep is measured against a ramp target and a tenured rep against a full one.
+The board runs in one of two modes, and the team picks by whether it wants to set targets. Points mode scores each line against a target and sums to one hundred, so it keeps magnitude and shows how far ahead the top rep is. Ranking mode sets nothing: it ranks the reps against each other on every line and adds up the positions, so it produces a defensible stack-rank with no calibration at all. The weights are the same in both modes, and quota stays absolute in the trailing view either way.
+
+### Points mode
+
+A count line scores its count against a target, the two source-weighted lines value self-sourced work at five times inbound, a conversion line scores its rate against a benchmark, and a lower-is-better line like velocity or stall scores the inverse. Each line's points are its score times its weight, and the composite is the sum.
 
 ```
-line_pct   = min(1, actual / target)        # count lines, when a target is set
-line_pct   = actual / top_performer_actual  # provisional, when no target yet
+line_pct   = min(1, actual / target)        # count lines
+line_pct   = min(1, rate / benchmark)       # conversion lines
+line_pct   = min(1, benchmark / actual)     # lower-is-better lines, velocity and stall
 effective  = 5 * self_sourced + 1 * inbound # source-weighted lines
 line_pts   = line_pct * line_weight
-composite  = sum(line_pts)                   # 0 to 100
+composite  = sum(line_pts)                   # 0 to 100, higher is better
 ```
 
-The weekly board does not wait on calibration. When a line has an agreed target it scores against it. When it does not, the agent scores that line relative to the team that same week, indexing each rep to the current top performer, and a trailing team median works too, so the line still runs from zero to its weight. That keeps the stack-rank and the top-to-median spread live from the first Monday, which is the whole point of the weekly board. Mark those lines provisional, and swap in absolute targets as they are set. The monthly board always scores against absolute targets and benchmarks, because there the absolute number is the point.
+If a single line has no target yet, index it to the current top performer for that line so it still scores, and mark it provisional until a target is set.
+
+### Ranking mode
+
+Rank the reps within their segment on each line, best to worst, one is best. Multiply each rep's position by the line's weight, and sum across the lines. The lowest weighted total is the top rep. No targets, no benchmarks, only the reps compared to each other.
+
+```
+position   = rank on this line, within segment   # 1 = best
+line_score = position * line_weight
+total      = sum(line_score)                 # lowest is best
+```
+
+Because the weight multiplies the position, a weak spot on a heavier line costs more, so BAMFAM at twenty outweighs stakeholders at fifteen exactly as it does in points mode. Ranking drops magnitude, so the board shows each rep's underlying numbers next to their positions, and the top-to-median spread is read from those numbers, not from the ranks.
+
+Each line has its own direction of better, and the agent ranks in that direction, so position one is always the best rep on that line and never just the biggest number. On most lines more is better. On the lower-is-better lines, cycle velocity and stall rate, the lowest value takes position one, since fewer days in stage and fewer stalled deals are the win. Multi-threading is higher-is-better, more engaged stakeholders per active deal is the stronger deal.
 
 ### Scoring when the data is imperfect
 
-Score every line the data supports this week, at the fidelity it supports. A line that cannot be attributed across the whole team, a systemic data gap and not a rep with no activity, comes off the board that week: drop it, renormalize the remaining weights to 100, and name what was dropped and why. A board on four honest lines still ranks the team, and the dropped line becomes the top of the fix list.
+Score every line the data supports this week, at the fidelity it supports. A line that cannot be attributed across the whole team, a systemic data gap and not a rep with no activity, comes off the board that week: drop it, and the rest carry the board. In points mode renormalize the remaining weights to one hundred, in ranking mode leave it out of the weighted total. Name what was dropped and why, so the gap becomes the top of the fix list.
 
-An event that cannot be verified is excluded from its line, never scored as zero. Not verified means unknown, so a rep is never ranked down for a gap in the data.
+An event that cannot be verified is excluded from its line, never scored as zero and never ranked. Not verified means unknown, so a rep is never ranked down for a gap in the data. A real zero or a real last place counts only when the data exists and the rep simply did none of that action.
 
 Stages are the team's own CRM stage values. Any customer action named on this page, a signed NDA or an opened sandbox, is an example of what a stage can mean, not a field the agent must hunt for. Read the stage from the CRM and credit the line when the opportunity reaches it.
 
-Where a line can be read at more than one fidelity, name which one produced the score. Book a meeting from a meeting is the clearest case: a transcript showing the next step agreed in the room is the strong read, and a follow-up invite created the same day, tied to the same account and an external contact with duplicates collapsed, is the interim proxy, labeled a same-day follow-up and not a booking confirmed on the call. Score the fidelity the data supports, and say which it was.
+Where a line can be read at more than one fidelity, name which one produced the score. Book a meeting from a meeting is the clearest case: a transcript showing the next step agreed in the room is the strong read, and a follow-up invite created the same day, tied to the same account and an external contact with duplicates collapsed, is the interim proxy, labeled a same-day follow-up and not a booking confirmed on the call. In-person meetings read the same way: a CRM in-person flag is the strong read, a calendar invite with a physical location and no video link is the labeled proxy. Score the fidelity the data supports, and say which it was.
 
-### The weekly board
+### The weekly board: doing
 
-| ID | Score | Weight | Data source | Measure, last 7 days | Rule |
-|----|-------|--------|-------------|----------------------|------|
-| W1 | New business meetings | 30 | Calendar and lead-source field, new-business accounts | Meetings held, split self-sourced vs inbound | min(1, effective/target), self-sourced 5x |
-| W2 | New opportunities opened | 25 | Opportunity reaching your first qualified stage, read from the CRM stage value and not an artifact such as an NDA | Deals that reached that stage, split by source | min(1, effective/target), self-sourced 5x |
-| W3 | Customer activation | 20 | Product event, the customer's first hands-on use, a trial or sandbox login | Active deals with a customer login this week | min(1, actual/target) |
-| W4 | Book a meeting from a meeting | 10 | A booked next step tied to a held meeting, detected however the agent's access allows (call transcript, or a next invite that follows soon after) | Share of meetings held that led to a next meeting booked | min(1, rate/target) |
-| W5 | Stakeholders added | 15 | Email and meeting activity on active deals | New engaged stakeholders on the deal, counted the way the team's data supports | min(1, actual/target) |
+The weights flex by segment, mid-market then enterprise, because in-person selling lives in the enterprise motion. Where in-person cannot be pulled, the line drops out and the rest carry the board.
 
-<Note>
-  The self-sourced tag reads from the lead-source field, so the 5x rewards real hunting. The 5x applies only when source is known for a material share of the field: when most activity is unclassified, run W1 and W2 as raw counts and mark the source weighting pending, so the board ranks on who hunted and not on who tagged. A stakeholder counts when there is real engagement, defined against the team's own data, so the line rewards multi-threading and not a bulk contact import.
-</Note>
-
-### The monthly board
-
-| ID | Score | Weight | Data source | Rule |
-|----|-------|--------|-------------|------|
-| P1 | Quota attainment, ramp-adjusted | 35 | Bookings vs a ramp-adjusted target | graduated curve, and the top-tier gate |
-| P2 | Win rate, evaluation to close | 25 | Closed-won over won plus lost, trailing ninety days | min(1, actual/benchmark) |
-| P3 | Conversion health | 15 | Stage-to-stage rates across the funnel | composite vs benchmark |
-| P4 | Late-stage velocity | 15 | Deals reaching the buying committee, paper started, days to close | blended vs target |
-| P5 | Commercial quality | 10 | Contract terms, multi-year, durable commitments, retention | blended vs target |
+| ID | Score | MM | ENT | Data source | Measure, last 7 days | Rule |
+|----|-------|----|----|-------------|----------------------|------|
+| W1 | New business meetings | 30 | 30 | Calendar and lead-source field, new-business accounts | Meetings held, split self-sourced vs inbound | min(1, effective/target), self-sourced 5x |
+| W2 | New opportunities opened | 30 | 20 | Opportunity reaching your first qualified stage, read from the CRM stage value and not an artifact such as an NDA | Deals that reached that stage, split by source | min(1, effective/target), self-sourced 5x |
+| W3 | In-person meetings | 5 | 15 | A CRM in-person flag is the strong read, a calendar invite with a physical location and no video link is the labeled proxy | In-person meetings on active deals | min(1, actual/target), drops out when no data |
+| W4 | Book a meeting from a meeting | 20 | 20 | A booked next step tied to a held meeting, detected however the agent's access allows (call transcript, or a next invite that follows soon after) | Share of meetings held that led to a next meeting booked | min(1, rate/target) |
+| W5 | Stakeholders added | 15 | 15 | Email and meeting activity on active deals | New engaged stakeholders on the deal, counted the way the team's data supports | min(1, actual/target) |
 
 <Note>
-  Quota stays off the weekly board and anchors the monthly one. A rep reaches the top tier only once quota clears a ramp-adjusted floor, so the day-to-day stack-rank rewards the inputs a rep controls.
+  The self-sourced tag reads from the lead-source field, so the 5x rewards real hunting. The 5x applies only when source is known for a material share of the field: when most activity is unclassified, run W1 and W2 as raw counts and mark the source weighting pending, so the board ranks on who hunted and not on who tagged. In-person scores on active deals, so it rewards showing up to advance real deals and does not double-count a new-business meeting already in W1.
 </Note>
+
+### The monthly board: progress
+
+Progress is conversion times velocity, and both read mid-cycle, so this board never waits on a close. Each line reads an event or a timestamp. The weights and windows flex by segment, because a long enterprise cycle must lean harder on late-stage progress and multi-threading, and read its rates over a longer window. Weights below show mid-market then enterprise.
+
+| ID | Score | MM | ENT | Reads | Rule |
+|----|-------|----|----|-------|------|
+| M1 | NBM to opportunity conversion | 20 | 15 | Meetings held, then qualified-stage entry on the same account | min(1, rate/benchmark) |
+| M2 | Opportunity to evaluation conversion | 15 | 15 | Qualified opps, then a live evaluation started, marked by the customer's first hands-on use | min(1, rate/benchmark) |
+| M3 | Evaluation to late-stage conversion | 15 | 20 | Evaluations, then the buying committee engaged | min(1, rate/benchmark) |
+| M4 | Cycle velocity | 20 | 15 | Days in stage, against a segment benchmark | min(1, benchmark/actual), lower days score higher |
+| M5 | Stall rate | 15 | 15 | Active deals with no stage advance and no interaction in the window | min(1, benchmark/actual), lower stall scores higher |
+| M6 | Multi-threading depth | 15 | 20 | Engaged stakeholders per active deal, a stock not the weekly flow | min(1, actual/benchmark) |
+
+Conversion lines read over a trailing window so the denominators stay stable, roughly a quarter for mid-market and two to four quarters for enterprise. Velocity and stall read the current open portfolio against a segment benchmark, so a two-hundred-day enterprise deal is not flagged slow for being enterprise. Multi-threading depth runs on both segments, with a lower benchmark for mid-market, because getting wide across the buying group predicts a win, more so the larger the deal.
+
+<Note>
+  The per-step conversion is the coaching signal: it shows exactly where a rep's funnel breaks. Strong NBM-to-opp and weak opp-to-eval is a rep who gets meetings and qualifies well but cannot drive an evaluation, a named gap a full cycle before the quota miss. A rep with too few deals to form a stable rate has that line drop out and the rest carry, so a ramping rep is never ranked on noise.
+</Note>
+
+### The trailing result view
+
+Quota and win rate are the only close-dependent measures, so they sit here, off the progress rank, read on a rolling window sized to the cycle. They are the lagging confirmation, and they are the check on progress that never converts.
+
+| View | Reads | Window |
+|------|-------|--------|
+| Quota attainment, ramp-adjusted | Bookings vs a ramp-adjusted target | Quarter to date for mid-market, rolling four quarters for enterprise |
+| Win rate | Closed-won over won plus lost | Trailing ninety days for mid-market, rolling twelve months for enterprise |
+
+Read the monthly progress rank against this view. High progress with a weak trailing result is the happy-pipeline rep, advancing deals that do not close. Weak progress with a strong trailing result is a rep riding momentum who is about to slide. Both are talent signals you get early, on facts.
 
 ## When a signal is missing, work it out with the user
 
-Every company runs its CRM, product analytics, and calendar on its own schema, so the fields and events named here will rarely match one to one. When a signal is missing, weak, or ambiguous, resolve it with the user rather than stop. A line left unscored because no one was asked is a failure of the process, not a limit of the data.
+Every company runs its CRM, product analytics, and calendar on its own schema, so the fields and events named here will rarely match one to one, and only the team knows its roster and who is ramping. So before the first run the agent establishes the roster, the segments, and the ramp cohorts with the user, and resolves any missing, weak, or ambiguous signal with the user rather than stop. A line left unscored because no one was asked is a failure of the process, not a limit of the data.
 
 <Steps>
+  <Step title="Confirm the roster and cohorts">
+    Before scoring, ask the user who is on the team, each rep's segment, and who is ramping with how long the ramp runs. The two tracks and the within-band ranking depend on it, and only the team knows it.
+  </Step>
   <Step title="Look before concluding">
     Inspect what the systems actually hold before calling a line unscorable. Search for any field that could carry lead source, any product event that marks first use, any calendar or call record that shows a next step. The signal often exists under a different name.
   </Step>
@@ -115,60 +158,78 @@ A refusal ends this loop. A question continues it, and the score starts provisio
   <Step title="Coach to one change">
     In the one-to-one I name one thing the rep did well, one thing to do differently, and a single commitment, anchored to the line that moves their number.
   </Step>
-  <Step title="Read the outcomes monthly">
-    Once a month I read the outcome board against the input-to-outcome map, to see which input is feeding, or starving, which result.
+  <Step title="Read progress monthly">
+    Once a month I rank the progress board and read it against the trailing result view, to see which rep's funnel is converting and moving, and whether progress is turning into closes. Movement in the rank is the early signal, so I watch who dropped before I watch who is on top.
   </Step>
 </Steps>
 
 ## Consistent and complementing
 
-The two boards are the same funnel at two depths, so every weekly input has a monthly outcome it feeds. Watching the pair is the diagnosis.
+The three layers read the same funnel at increasing depth, so every weekly action has a monthly conversion it should produce, and the trailing view confirms whether it closed. Watching a step across the layers is the diagnosis.
 
-| Weekly input | The monthly outcome it moves |
-|--------------|------------------------------|
-| Meetings and opportunities created | Conversion health, then quota |
-| Customer activation | Win rate, because an activated evaluation closes more often |
-| Stakeholders added | Win rate and deals reaching the buying committee |
-| Book a meeting from a meeting | Velocity, because a booked next step keeps the deal moving |
+| Weekly action, the doing | Monthly progress it should produce |
+|--------------------------|------------------------------------|
+| Meetings held | NBM to opportunity conversion |
+| Opportunities opened | Opportunity to evaluation conversion |
+| In-person meetings on active deals | Evaluation to late-stage conversion |
+| Next steps booked | Cycle velocity, lower stall |
+| Stakeholders added | Multi-threading depth |
 
 <Note>
-  When the weekly inputs run green and the monthly outcomes lag, the work is conversion. When both run green, the engine is healthy and scaling. The weekly board already names the rep and the line.
+  When the weekly actions run green but the monthly conversion lags, the rep is doing the motions without advancing deals, a quality gap and not an effort gap. The trailing result view then confirms whether the progress is turning into closes. Each layer names the rep and the exact step.
 </Note>
 
 ## Measure to tenure
 
-I measure a rep on the stage they are in, so the board is fair from week one and a new hire can earn a real win early, on a behavior they control right now.
+A new hire and a tenured rep cannot sit in the same rank, because the new hire has not had time to build pipeline or reach a late stage. So reps run on two tracks, and the agent asks the user who is ramping and how long the ramp runs, because every team draws that line differently.
 
-<CardGroup cols={3}>
-  <Card title="Ramping" icon="seedling">Score on meetings created. An early win on a behavior the rep owns.</Card>
-  <Card title="Maturing" icon="arrow-trend-up">Score on mid-stage pipeline and multi-threading.</Card>
-  <Card title="Tenured" icon="award">Score on closed revenue, with the full monthly board live.</Card>
+<CardGroup cols={2}>
+  <Card title="Ramp track" icon="seedling">
+    Hire to ramp-complete. Scored on the doing board and the first conversions, judged against ramp milestones, and compared only within the ramping cohort. Developmental, and deliberately off the talent stack-rank.
+  </Card>
+  <Card title="Performance track" icon="award">
+    Ramp-complete onward. The full three layers and the stack-rank, the talent read, compared within segment.
+  </Card>
 </CardGroup>
+
+The calculation adjusts as the rep ramps. A line they have not reached, a late-stage conversion or a close they have no deals for yet, is excluded for that rep and never scored zero, because it is not a miss. So the board starts as doing plus the first conversion and fills in as their deals move down the funnel, and you trust the doing board most early and the result most late. Rank within the ramp band so everyone compared has the same live lines, and when a band holds only a rep or two, fall back to the ramp-adjusted target or coach from the raw numbers without a rank.
 
 ## What the agent writes
 
-For each rep the agent fills this shape and ranks the team. The spread between the top rep and the median is the headline I read first.
+For each rep the agent fills the weekly board and the monthly progress board, ranks the team on each within segment, and attaches the trailing result view as context. The enterprise profile and ranking mode are shown below. The headline I read first is the top-to-median spread and who moved.
 
-| Rep | W1 | W2 | W3 | W4 | W5 | Weekly /100 | Rank | Monthly /100 |
-|-----|----|----|----|----|----|-------------|------|--------------|
-| Rep A | 27 | 25 | 20 | 10 | 12 | 94 | 1 | 71 |
-| Rep B | 18 | 14 | 20 | 0 | 9 | 61 | 2 | 58 |
-| Rep C | 12 | 10 | 8 | 10 | 6 | 46 | 3 | 44 |
+Weekly board, ranking mode. Each cell is the rep's position on that line, the total is the weighted sum of positions, and the lowest total is rank one:
 
-Example rows, showing the output shape. The agent replaces them with live data.
+| Rep | W1 | W2 | W3 | W4 | W5 | Weighted total | Rank |
+|-----|----|----|----|----|----|----------------|------|
+| Rep A | 1 | 1 | 2 | 1 | 1 | 115 | 1 |
+| Rep C | 2 | 2 | 1 | 2 | 3 | 200 | 2 |
+| Rep B | 3 | 3 | 3 | 3 | 2 | 285 | 3 |
 
-Alongside the scores, the agent reports the coverage behind each line, the share of events it could verify or classify, such as source known on W1 and W2 or transcript and calendar coverage on W4. A line scored on thin coverage is labeled provisional, so the board shows how firm each number is and no one reads a soft line as settled.
+Monthly progress board, ranking mode, with the trailing result alongside:
+
+| Rep | M1 | M2 | M3 | M4 | M5 | M6 | Weighted total | Rank | Move | Quota, trailing | Win rate, trailing |
+|-----|----|----|----|----|----|----|----------------|------|------|-----------------|--------------------|
+| Rep A | 2 | 1 | 1 | 1 | 2 | 1 | 130 | 1 | +2 | 72% | 31% |
+| Rep C | 1 | 2 | 2 | 2 | 1 | 2 | 170 | 2 | 0 | 48% | 26% |
+| Rep B | 3 | 3 | 3 | 3 | 3 | 3 | 300 | 3 | -3 | 0% | n/a |
+
+Example rows, showing the output shape. Positions are within segment, the lower total wins, and the Move column is the change in overall rank since last month, because the early signal is usually the slide. In points mode the same cells hold each line's points and the total becomes a composite out of one hundred. The agent also shows each rep's underlying numbers behind the positions, so the spread stays readable and no one reads a rank as a magnitude.
+
+Alongside the scores, the agent reports the coverage behind each line, the share of events it could verify or classify, such as source known on W1 and W2, in-person coverage on W3, transcript and calendar coverage on W4, or the denominator behind each conversion line. A line scored on thin coverage is labeled provisional, so the board shows how firm each number is and no one reads a soft line as settled.
 
 ## What each team supplies
 
-The method is complete on this page. Two inputs make it run on your data, and three more unlock the parked lines.
+The method is complete on this page. In ranking mode it needs none of the targets, only the reps to compare. In points mode a few inputs make it run on your data.
 
 <Steps>
-  <Step title="Targets">A value per line, per segment and ramp stage. The monthly board needs them. The weekly board uses them when set and scores relative to the team when they are not, so it runs without waiting.</Step>
+  <Step title="The roster and ramp cohorts">Each rep's segment, and who is ramping with the ramp length, so the two tracks and the within-band ranking work. Only the team has this, so the agent asks.</Step>
+  <Step title="Targets and benchmarks">Only for points mode: a value per line, per segment and ramp stage, weekly targets for the count lines and conversion and velocity benchmarks for the progress board. Ranking mode needs none of these.</Step>
   <Step title="A lead-source field">The source or first-touch tag that marks self-sourced from inbound, so the 5x is data and never a rep's own label.</Step>
-  <Step title="A product activation event">A customer-login signal piped to the data layer, for the activation line.</Step>
+  <Step title="A product activation event">A customer first-use signal piped to the data layer, which marks the evaluation conversion on the monthly board.</Step>
+  <Step title="An in-person signal">A CRM in-person flag, or calendar location data to infer it, for the in-person line on the weekly board.</Step>
   <Step title="The CRM field names">The object, stage, and field names for the qualified stage, active-deal status, and contact roles, so the queries resolve.</Step>
-  <Step title="Stage timestamps">Entry and exit times per stage, which unlock stall control on the weekly board and velocity on the monthly.</Step>
+  <Step title="Stage timestamps">Entry and exit times per stage. These drive the whole progress board: the conversion rates, the velocity, and the stall line all read them.</Step>
 </Steps>
 
 ## What good looks like
@@ -176,6 +237,7 @@ The method is complete on this page. Two inputs make it run on your data, and th
 - The weekly board is a fact, not a debate, because every line is a counted event.
 - Every rep knows the one or two lines that move their number, and manages to them.
 - The top-to-median spread is narrowing quarter over quarter.
-- When the monthly outcomes lag a green weekly board, I know the work is conversion, and the board already names the rep and the line.
+- When the weekly actions run green but monthly progress lags, I know the gap is quality, not effort, and the board names the rep and the step.
+- When progress runs green but the trailing result lags, I catch the happy-pipeline rep early, before the quarter confirms it.
 
 Pair this with the [operating rhythm](/operating-rhythm) for the weekly cadence, [incentive design](/incentive-design) to pay on the same inputs, and [deal management](/deal-management) for the customer-action stages the scores sit on.
